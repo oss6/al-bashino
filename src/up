@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+# ##################################################
+#
+# HISTORY:
+#
+# * DATE - v1.0.0  - Initial commit
+#
+# ##################################################
+
+usage() {
+    echo -n "Usage
+-----
+ up N
+
+ Goes up through the directory tree N times. N must be a natural number.
+"
+}
+
+function up() {
+    # Print help if no arguments were passed.
+    # -------------------------------------
+    if [[ $# -eq 0 ]] ; then
+        usage
+	    return 1
+    fi
+    
+    exitStatus=0
+    args+=("$@")
+
+    num=${args[0]}
+    re='^[0-9]+$'
+    
+    if [[ $num =~ $re ]] ; then
+	    for (( i=1; i<=$num; i++ ))
+	    do
+            cd ../
+	    done
+    else
+	    exitStatus=1
+    fi
+
+    # Exit cleanly
+    if (( $? > 0 )) ; then
+	    return $?
+    else
+	    return $exitStatus
+    fi
+}
