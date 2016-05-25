@@ -82,7 +82,7 @@ while [[ $1 = -?* ]]; do
 	-h|--help) usage >&2; safeExit ;;
 	--version) echo "$(basename $0) ${version}"; safeExit ;;
 	--endopts) shift; break ;;
-	*) keys+=${1#--}; shift; values+=$1 ;;
+	*) keys+=("${1#--}"); shift; values+=("'$1'") ;;
     esac
     shift
 done
@@ -95,8 +95,6 @@ set -o errexit
 
 # Bash will remember & return the highest exitcode in a chain of pipes.
 set -o pipefail
-
-echo -n ${#keys[@]}
 
 # Run your script
 for ((i=0; i < ${#keys[@]}; i++)); do
