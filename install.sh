@@ -15,6 +15,10 @@ function mainScript() {
     installdir="/usr/local/bin/"
     toinstall=(
         up
+        palias
+    )
+    sourcedScripts=(
+        up
     )
 
     for script in "${toinstall[@]}"
@@ -23,6 +27,16 @@ function mainScript() {
         chmod 755 ${installdir}${script}
         success "$script copied"
     done
+    
+    if [ "$sourcing" = true ] ; then
+        printf "\n# AL-BASHINO SCRIPTS\n" >> ~/.bashrc
+        printf "# ------------------\n" >> ~/.bashrc
+        for script in "${sourcedScripts[@]}"
+        do
+            echo ". ${installdir}${script}" >> ~/.bashrc
+            success "$script sourced (see ~/.bashrc)"
+        done
+    fi
 
     echo -n
 }
@@ -42,6 +56,7 @@ function safeExit() {
 # Set Flags
 # -----------------------------------
 quiet=false
+sourcing=true
 args=()
 
 # Options and Usage
@@ -100,7 +115,7 @@ while [[ $1 = -?* ]]; do
   case $1 in
     -h|--help) usage >&2; safeExit ;;
     --version) echo "$(basename $0) ${version}"; safeExit ;;
-#    -u|--username) shift; username=${1} ;;
+    -s|--no-sourcing) sourcing=false ;;
     -q|--quiet) quiet=true ;;
     --endopts) shift; break ;;
     *) die "invalid option: '$1'." ;;
