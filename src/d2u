@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+# ##################################################
+#
+version="1.0.0"
+#
+# HISTORY:
+#
+# * DATE - v1.0.0  - Initial commit
+#
+# ##################################################
+
+usage() {
+    echo -n "Usage
+-----
+ d2u <winfile> <unixfile>
+
+ Convert line endings from DOS to UNIX format.
+ The two files MUST have different names.
+"
+}
+
+function safeExit() {
+    # safeExit
+    # -----------------------------------
+    # Non destructive exit for when script exits naturally.
+    # -----------------------------------
+    trap - INT TERM EXIT
+    exit
+}
+
+scriptName=$(basename "$0")
+
+# Read the options
+while [[ $1 = -?* ]]; do
+    case $1 in
+        -h|--help) usage >&2; safeExit ;;
+        --version) echo "$(basename $0) ${version}"; safeExit ;;
+        --endopts) shift; break ;;
+        *) die "invalid option: '$1'." ;;
+    esac
+    shift
+done
+
+# Store the remaining part as arguments.
+args+=("$@")
+argD=${args[0]}
+argU=${args[1]}
+
+if [ "$argD" = "$argU" ] ; then
+    usage
+    exit 1
+fi
+
+tr -d '\15\32' < "$argD" > "$argU"

@@ -16,6 +16,7 @@ function mainScript() {
     toinstall=(
         up
         palias
+        d2u
     )
     sourcedScripts=(
         up

@@ -28,7 +28,7 @@ function safeExit() {
 usage() {
     echo -n "${scriptName} [OPTION]...
 
-This is a script template.  Edit this description to print help to users.
+Create a permanent alias in .bashrc
 
  Options:
   --[alias_name]=[command]
